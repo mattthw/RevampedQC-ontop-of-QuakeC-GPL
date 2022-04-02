@@ -1,29 +1,8 @@
-/*  Copyright (C) 1996-1997  Id Software, Inc.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-
-    See file, 'COPYING', for details.
-*/
 
 /*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for spotlights, etc.
 */
-void() info_null =
-{
-	remove(self);
-};
+//var void() info_null = SUB_Remove;
 
 /*QUAKED info_notnull (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for lightning.
@@ -46,7 +25,7 @@ void() light_use =
 	else
 	{
 		lightstyle(self.style, "a");
-		self.spawnflags = self.spawnflags + START_OFF;
+		self.spawnflags = self.spawnflags | START_OFF;
 	}
 };
 
@@ -59,11 +38,11 @@ If targeted, it will toggle between on or off.
 void() light =
 {
 	if (!self.targetname)
-	{ // inert light
+	{       // inert light
 		remove(self);
 		return;
 	}
-
+	
 	if (self.style >= 32)
 	{
 		self.use = light_use;
@@ -91,9 +70,9 @@ void() light_fluoro =
 		else
 			lightstyle(self.style, "m");
 	}
-
-	precache_sound("ambience/fl_hum1.wav");
-	ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
+	
+	precache_sound ("ambience/fl_hum1.wav");
+	ambientsound (self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
 };
 
 /*QUAKED light_fluorospark (0 1 0) (-8 -8 -8) (8 8 8)
@@ -107,8 +86,8 @@ void() light_fluorospark =
 	if (!self.style)
 		self.style = 10;
 
-	precache_sound("ambience/buzz1.wav");
-	ambientsound(self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/buzz1.wav");
+	ambientsound (self.origin, "ambience/buzz1.wav", 0.5, ATTN_STATIC);
 };
 
 /*QUAKED light_globe (0 1 0) (-8 -8 -8) (8 8 8)
@@ -118,16 +97,17 @@ Default style is 0
 */
 void() light_globe =
 {
-	precache_model("progs/s_light.spr");
-	setmodel(self, "progs/s_light.spr");
-	makestatic(self);
+	precache_model ("progs/s_light.spr");
+	setmodel (self, "progs/s_light.spr");
+	self.alpha = 0.5;
+	makestatic (self);
 };
 
 void() FireAmbient =
 {
-	precache_sound("ambience/fire1.wav");
+	precache_sound ("ambience/fire1.wav");
 // attenuate fast
-	ambientsound(self.origin, "ambience/fire1.wav", 0.5, ATTN_STATIC);
+	ambientsound (self.origin, "ambience/fire1.wav", 0.5, ATTN_STATIC);
 };
 
 /*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20)
@@ -137,10 +117,10 @@ Default style is 0
 */
 void() light_torch_small_walltorch =
 {
-	precache_model("progs/flame.mdl");
-	setmodel(self, "progs/flame.mdl");
-	FireAmbient();
-	makestatic(self);
+	precache_model ("progs/flame.mdl");
+	setmodel (self, "progs/flame.mdl");
+	FireAmbient ();
+	makestatic (self);
 };
 
 /*QUAKED light_flame_large_yellow (0 1 0) (-10 -10 -12) (12 12 18)
@@ -148,11 +128,12 @@ Large yellow flame ball
 */
 void() light_flame_large_yellow =
 {
-	precache_model("progs/flame2.mdl");
-	setmodel(self, "progs/flame2.mdl");
+	precache_model ("progs/flame2.mdl");
+	setmodel (self, "progs/flame2.mdl");
 	self.frame = 1;
-	FireAmbient();
-	makestatic(self);
+	self.alpha = 0.5;
+	FireAmbient ();
+	makestatic (self);
 };
 
 /*QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) START_OFF
@@ -160,10 +141,11 @@ Small yellow flame ball
 */
 void() light_flame_small_yellow =
 {
-	precache_model("progs/flame2.mdl");
-	setmodel(self, "progs/flame2.mdl");
-	FireAmbient();
-	makestatic(self);
+	precache_model ("progs/flame2.mdl");
+	setmodel (self, "progs/flame2.mdl");
+	self.alpha = 0.5;
+	FireAmbient ();
+	makestatic (self);
 };
 
 /*QUAKED light_flame_small_white (0 1 0) (-10 -10 -40) (10 10 40) START_OFF
@@ -171,10 +153,11 @@ Small white flame ball
 */
 void() light_flame_small_white =
 {
-	precache_model("progs/flame2.mdl");
-	setmodel(self, "progs/flame2.mdl");
-	FireAmbient();
-	makestatic(self);
+	precache_model ("progs/flame2.mdl");
+	setmodel (self, "progs/flame2.mdl");
+	self.alpha = 0.5;
+	FireAmbient ();
+	makestatic (self);
 };
 
 //============================================================================
@@ -184,47 +167,31 @@ void() light_flame_small_white =
 Lava Balls
 */
 
-void() fire_fly;
-void() fire_touch;
-void() misc_fireball =
-{
-
-	precache_model("progs/lavaball.mdl");
-	self.classname = "fireball";
-	self.nextthink = time + (random() * 5);
-	self.think = fire_fly;
-	if (!self.speed)
-		self.speed = 1000;
-};
-
 void() fire_fly =
 {
-	entity fireball;
+	local vector vel;
 
-	fireball = spawn();
-	fireball.solid = SOLID_TRIGGER;
-	fireball.movetype = MOVETYPE_TOSS;
-	fireball.velocity = '0 0 1000';
-	fireball.velocity_x = (random() * 100) - 50;
-	fireball.velocity_y = (random() * 100) - 50;
-	fireball.velocity_z = self.speed + (random() * 200);
-	fireball.classname = "fireball";
-	setmodel(fireball, "progs/lavaball.mdl");
-	setsize(fireball, '0 0 0', '0 0 0');
-	setorigin(fireball, self.origin);
-	fireball.nextthink = time + 5;
-	fireball.think = SUB_Remove;
-	fireball.touch = fire_touch;
+	vel_x = (random() * 100) - 50;
+	vel_y = (random() * 100) - 50;
+	vel_z = self.speed + (random() * 200);
 
+	PRJ_FireProjectile (world, "progs/lavaball.mdl", self.origin, vel, PE_NONE, 20, MOD_FIREBALL, 5);
+	newmis.movetype = MOVETYPE_BOUNCE;
+	newmis.alpha = 0.9;
+	
 	self.nextthink = time + (random() * 5) + 3;
 	self.think = fire_fly;
 };
 
-
-void() fire_touch =
+void() misc_fireball =
 {
-	T_Damage(other, self, self, 20);
-	remove(self);
+	
+	precache_model ("progs/lavaball.mdl");
+	self.classname = "fireball";
+	self.nextthink = time + 0.1 + (random() * 4.9);
+	self.think = fire_fly;
+	if (!self.speed)
+		self.speed = 1000;
 };
 
 //============================================================================
@@ -234,13 +201,10 @@ void() barrel_explode =
 {
 	self.takedamage = DAMAGE_NO;
 	self.classname = "explo_box";
-	// did say self.owner
-	T_RadiusDamage(self, self, 160, world);
-	sound(self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
-	particle(self.origin, '0 0 0', 75, 255);
-
-	self.origin_z = self.origin_z + 32;
-	BecomeExplosion();
+	// did say self.owner, self.enemy should be set by Killed function
+	T_RadiusDamage (self, self.enemy, 160, 200, self, MOD_EXPLOBOX);
+	TE_explosion(self.origin + '0 0 32');
+	remove (self);
 };
 
 
@@ -251,13 +215,14 @@ TESTING THING
 
 void() misc_explobox =
 {
-	float oldz;
-
+	local float     oldz;
+	
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
-	precache_model("maps/b_explob.bsp");
-	setmodel(self, "maps/b_explob.bsp");
-	precache_sound("weapons/r_exp3.wav");
+	precache_model ("maps/b_explob.bsp");
+	setmodel (self, "maps/b_explob.bsp");
+	setsize (self, '0 0 0', '32 32 64');
+	precache_sound ("weapons/r_exp3.wav");
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;
@@ -267,9 +232,9 @@ void() misc_explobox =
 	droptofloor();
 	if (oldz - self.origin_z > 250)
 	{
-		dprint("item fell out of level at ");
-		dprint(vtos(self.origin));
-		dprint("\n");
+		dprint ("item fell out of level at ");
+		dprint (vtos(self.origin));
+		dprint ("\n");
 		remove(self);
 	}
 };
@@ -283,13 +248,14 @@ Smaller exploding box, REGISTERED ONLY
 
 void() misc_explobox2 =
 {
-	float oldz;
-
+	local float     oldz;
+	
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	precache_model2 ("maps/b_exbox2.bsp");
-	setmodel(self, "maps/b_exbox2.bsp");
-	precache_sound("weapons/r_exp3.wav");
+	setmodel (self, "maps/b_exbox2.bsp");
+	setsize (self, '0 0 0', '32 32 32');
+	precache_sound ("weapons/r_exp3.wav");
 	self.health = 20;
 	self.th_die = barrel_explode;
 	self.takedamage = DAMAGE_AIM;
@@ -299,40 +265,64 @@ void() misc_explobox2 =
 	droptofloor();
 	if (oldz - self.origin_z > 250)
 	{
-		dprint("item fell out of level at ");
-		dprint(vtos(self.origin));
-		dprint("\n");
+		dprint ("item fell out of level at ");
+		dprint (vtos(self.origin));
+		dprint ("\n");
 		remove(self);
 	}
 };
 
 //============================================================================
 
-float SPAWNFLAG_SUPERSPIKE = 1;
+float SPAWNFLAG_SUPERSPIKE      = 1;
 float SPAWNFLAG_LASER = 2;
-
-void(vector org, vector vec) LaunchLaser;
 
 void() spikeshooter_use =
 {
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
-		sound(self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
-		LaunchLaser(self.origin, self.movedir);
+		sound (self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM);
+		PRJ_FireProjectile(self,
+			"progs/laser.mdl",
+			self.origin,
+			self.movedir * 600,
+			PE_LASER,
+			15,
+			MOD_LASER,
+			5);
+		newmis.alpha = 0.5;
 	}
 	else
 	{
-		sound(self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
-		launch_spike(self.origin, self.movedir);
-		newmis.velocity = self.movedir * 500;
+		sound (self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM);
 		if (self.spawnflags & SPAWNFLAG_SUPERSPIKE)
-			newmis.touch = superspike_touch;
+		{
+			PRJ_FireProjectile(self,
+				"progs/s_spike.mdl",
+				self.origin,
+				self.movedir * 500,
+				PE_SUPERSPIKE,
+				18,
+				MOD_SUPERSPIKE,
+				6);
+		}
+		else
+		{
+			PRJ_FireProjectile(self,
+				"progs/spike.mdl",
+				self.origin,
+				self.movedir * 500,
+				PE_SPIKE,
+				9,
+				MOD_SPIKE,
+				6);
+		}
 	}
 };
 
 void() shooter_think =
 {
-	spikeshooter_use();
+	spikeshooter_use ();
 	self.nextthink = time + self.wait;
 	newmis.velocity = self.movedir * 500;
 };
@@ -345,32 +335,32 @@ Laser is only for REGISTERED.
 
 void() trap_spikeshooter =
 {
-	SetMovedir();
+	SetMovedir ();
 	self.use = spikeshooter_use;
 	if (self.spawnflags & SPAWNFLAG_LASER)
 	{
 		precache_model2 ("progs/laser.mdl");
-
+		
 		precache_sound2 ("enforcer/enfire.wav");
 		precache_sound2 ("enforcer/enfstop.wav");
 	}
 	else
-		precache_sound("weapons/spike2.wav");
+		precache_sound ("weapons/spike2.wav");
 };
 
 
 /*QUAKED trap_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) superspike laser
 Continuously fires spikes.
-"wait" time between spike(1.0 default)
+"wait" time between spike (1.0 default)
 "nextthink" delay before firing first spike, so multiple shooters can be stagered.
 */
 void() trap_shooter =
 {
-	trap_spikeshooter();
-
+	trap_spikeshooter ();
+	
 	if (self.wait == 0)
 		self.wait = 1;
-	self.nextthink = self.nextthink + self.wait + self.ltime;
+	self.nextthink = time + self.wait;
 	self.think = shooter_think;
 };
 
@@ -383,9 +373,7 @@ void() trap_shooter =
 ===============================================================================
 */
 
-
 void() make_bubbles;
-void() bubble_remove;
 void() bubble_bob;
 
 /*QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8)
@@ -393,80 +381,58 @@ void() bubble_bob;
 testing air bubbles
 */
 
-void() air_bubbles =
-
-{
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
-	precache_model("progs/s_bubble.spr");
-	self.nextthink = time + 1;
-	self.think = make_bubbles;
-};
+noref var void() air_bubbles = SUB_Remove;
 
 void() make_bubbles =
 {
-	entity bubble;
+local entity    bubble;
 
 	bubble = spawn();
-	setmodel(bubble, "progs/s_bubble.spr");
-	setorigin(bubble, self.origin);
+	setmodel (bubble, "progs/s_bubble.spr");
+	setorigin (bubble, self.origin);
 	bubble.movetype = MOVETYPE_NOCLIP;
 	bubble.solid = SOLID_NOT;
 	bubble.velocity = '0 0 15';
 	bubble.nextthink = time + 0.5;
 	bubble.think = bubble_bob;
-	bubble.touch = bubble_remove;
 	bubble.classname = "bubble";
 	bubble.frame = 0;
-	bubble.cnt = 0;
-	setsize(bubble, '-8 -8 -8', '8 8 8');
+	bubble.bubble_state = 0;
+	bubble.alpha = 0.4;
+	setsize (bubble, '-8 -8 -8', '8 8 8');
 	self.nextthink = time + random() + 0.5;
 	self.think = make_bubbles;
 };
 
 void() bubble_split =
 {
-	entity bubble;
+local entity    bubble;
 	bubble = spawn();
-	setmodel(bubble, "progs/s_bubble.spr");
-	setorigin(bubble, self.origin);
+	setmodel (bubble, "progs/s_bubble.spr");
+	setorigin (bubble, self.origin);
 	bubble.movetype = MOVETYPE_NOCLIP;
 	bubble.solid = SOLID_NOT;
 	bubble.velocity = self.velocity;
 	bubble.nextthink = time + 0.5;
 	bubble.think = bubble_bob;
-	bubble.touch = bubble_remove;
 	bubble.classname = "bubble";
 	bubble.frame = 1;
-	bubble.cnt = 10;
-	setsize(bubble, '-8 -8 -8', '8 8 8');
+	bubble.bubble_state = 10;
+	setsize (bubble, '-8 -8 -8', '8 8 8');
 	self.frame = 1;
-	self.cnt = 10;
+	self.bubble_state = 10;
 	if (self.waterlevel != 3)
-		remove(self);
-};
-
-void() bubble_remove =
-{
-	if (other.classname == self.classname)
-	{
-//		dprint("bump");
-		return;
-	}
-	remove(self);
+		remove (self);
 };
 
 void() bubble_bob =
 {
-	float rnd1, rnd2, rnd3;
+local float             rnd1, rnd2, rnd3;
 
-	self.cnt = self.cnt + 1;
-	if (self.cnt == 4)
+	self.bubble_state = self.bubble_state + 1;
+	if (self.bubble_state == 4)
 		bubble_split();
-	if (self.cnt == 20)
+	if (self.bubble_state == 20)
 		remove(self);
 
 	rnd1 = self.velocity_x + (-10 + (random() * 20));
@@ -477,21 +443,21 @@ void() bubble_bob =
 		rnd1 = 5;
 	if (rnd1 < -10)
 		rnd1 = -5;
-
+		
 	if (rnd2 > 10)
 		rnd2 = 5;
 	if (rnd2 < -10)
 		rnd2 = -5;
-
+		
 	if (rnd3 < 10)
 		rnd3 = 15;
 	if (rnd3 > 30)
 		rnd3 = 25;
-
+	
 	self.velocity_x = rnd1;
 	self.velocity_y = rnd2;
 	self.velocity_z = rnd3;
-
+		
 	self.nextthink = time + 0.5;
 	self.think = bubble_bob;
 };
@@ -504,15 +470,7 @@ void() bubble_bob =
 Just for the debugging level.  Don't use
 */
 
-void() viewthing =
-
-{
-	self.movetype = MOVETYPE_NONE;
-	self.solid = SOLID_NOT;
-	precache_model("progs/player.mdl");
-	setmodel(self, "progs/player.mdl");
-};
-
+noref var void() viewthing = SUB_Remove;
 
 /*
 ==============================================================================
@@ -523,7 +481,7 @@ SIMPLE BMODELS
 */
 
 void() func_wall_use =
-{ // change to alternate textures
+{       // change to alternate textures
 	self.frame = 1 - self.frame;
 };
 
@@ -533,10 +491,10 @@ This is just a solid wall if not inhibitted
 void() func_wall =
 {
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
-	setmodel(self, self.model);
+	setmodel (self, self.model);
 };
 
 
@@ -544,45 +502,44 @@ void() func_wall =
 A simple entity that looks solid but lets you walk through it.
 */
 void() func_illusionary =
-
 {
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel(self, self.model);
-	// Playing it safe and removing the makestatic call without the params instead of adding self
-	// makestatic();
+	setmodel (self, self.model);
+	makestatic (self);
 };
 
 /*QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4
 This bmodel will appear if the episode has allready been completed, so players can't reenter it.
 */
 void() func_episodegate =
-
 {
 	if (!(serverflags & self.spawnflags))
-		return; // can still enter episode
+		return;                 // can still enter episode
 
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
-	setmodel(self, self.model);
+	setmodel (self, self.model);
 };
 
 /*QUAKED func_bossgate (0 .5 .8) ?
 This bmodel appears unless players have all of the episode sigils.
 */
 void() func_bossgate =
-
 {
-	if ((serverflags & 15) == 15)
-		return; // all episodes completed
+	if ( (serverflags & 15) == 15)
+	{
+		remove(self);
+		return;         // all episodes completed
+	}
 	self.angles = '0 0 0';
-	self.movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
+	self.movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
-	setmodel(self, self.model);
+	setmodel (self, self.model);
 };
 
 //============================================================================
@@ -590,101 +547,64 @@ void() func_bossgate =
 */
 void() ambient_suck_wind =
 {
-	precache_sound("ambience/suck1.wav");
-	ambientsound(self.origin, "ambience/suck1.wav", 1, ATTN_STATIC);
+	precache_sound ("ambience/suck1.wav");
+	ambientsound (self.origin, "ambience/suck1.wav", 1, ATTN_STATIC);
 };
 
 /*QUAKED ambient_drone (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_drone =
 {
-	precache_sound("ambience/drone6.wav");
-	ambientsound(self.origin, "ambience/drone6.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/drone6.wav");
+	ambientsound (self.origin, "ambience/drone6.wav", 0.5, ATTN_STATIC);
 };
 
 /*QUAKED ambient_flouro_buzz (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_flouro_buzz =
 {
-	precache_sound("ambience/buzz1.wav");
-	ambientsound(self.origin, "ambience/buzz1.wav", 1, ATTN_STATIC);
+	precache_sound ("ambience/buzz1.wav");
+	ambientsound (self.origin, "ambience/buzz1.wav", 1, ATTN_STATIC);
 };
 /*QUAKED ambient_drip (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_drip =
 {
-	precache_sound("ambience/drip1.wav");
-	ambientsound(self.origin, "ambience/drip1.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/drip1.wav");
+	ambientsound (self.origin, "ambience/drip1.wav", 0.5, ATTN_STATIC);
 };
 /*QUAKED ambient_comp_hum (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_comp_hum =
 {
-	precache_sound("ambience/comp1.wav");
-	ambientsound(self.origin, "ambience/comp1.wav", 1, ATTN_STATIC);
+	precache_sound ("ambience/comp1.wav");
+	ambientsound (self.origin, "ambience/comp1.wav", 1, ATTN_STATIC);
 };
 /*QUAKED ambient_thunder (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_thunder =
 {
-	precache_sound("ambience/thunder1.wav");
-	ambientsound(self.origin, "ambience/thunder1.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/thunder1.wav");
+	ambientsound (self.origin, "ambience/thunder1.wav", 0.5, ATTN_STATIC);
 };
 /*QUAKED ambient_light_buzz (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_light_buzz =
 {
-	precache_sound("ambience/fl_hum1.wav");
-	ambientsound(self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/fl_hum1.wav");
+	ambientsound (self.origin, "ambience/fl_hum1.wav", 0.5, ATTN_STATIC);
 };
 /*QUAKED ambient_swamp1 (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_swamp1 =
 {
-	precache_sound("ambience/swamp1.wav");
-	ambientsound(self.origin, "ambience/swamp1.wav", 0.5, ATTN_STATIC);
+	precache_sound ("ambience/swamp1.wav");
+	ambientsound (self.origin, "ambience/swamp1.wav", 0.8, ATTN_NONE);
 };
 /*QUAKED ambient_swamp2 (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
 */
 void() ambient_swamp2 =
 {
-	precache_sound("ambience/swamp2.wav");
-	ambientsound(self.origin, "ambience/swamp2.wav", 0.5, ATTN_STATIC);
-};
-
-//============================================================================
-
-void() noise_think =
-{
-	self.nextthink = time + 0.5;
-	sound(self, 1, "enforcer/enfire.wav", 1, ATTN_NORM);
-	sound(self, 2, "enforcer/enfstop.wav", 1, ATTN_NORM);
-	sound(self, 3, "enforcer/sight1.wav", 1, ATTN_NORM);
-	sound(self, 4, "enforcer/sight2.wav", 1, ATTN_NORM);
-	sound(self, 5, "enforcer/sight3.wav", 1, ATTN_NORM);
-	sound(self, 6, "enforcer/sight4.wav", 1, ATTN_NORM);
-	sound(self, 7, "enforcer/pain1.wav", 1, ATTN_NORM);
-};
-
-/*QUAKED misc_noisemaker (1 0.5 0) (-10 -10 -10) (10 10 10)
-
-For optimzation testing, starts a lot of sounds.
-*/
-
-void() misc_noisemaker =
-
-{
-	precache_sound2 ("enforcer/enfire.wav");
-	precache_sound2 ("enforcer/enfstop.wav");
-	precache_sound2 ("enforcer/sight1.wav");
-	precache_sound2 ("enforcer/sight2.wav");
-	precache_sound2 ("enforcer/sight3.wav");
-	precache_sound2 ("enforcer/sight4.wav");
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/death1.wav");
-	precache_sound2 ("enforcer/idle1.wav");
-
-	self.nextthink = time + 0.1 + random();
-	self.think = noise_think;
+	precache_sound ("ambience/swamp2.wav");
+	ambientsound (self.origin, "ambience/swamp2.wav", 0.8, ATTN_NONE);
 };
